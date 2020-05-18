@@ -1,6 +1,7 @@
 package ninja.seppli.lewebseite.common.article.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ninja.seppli.lewebseite.common.article.model.Article;
 import ninja.seppli.lewebseite.common.article.repository.ArticleRepository;
@@ -12,6 +13,7 @@ import ninja.seppli.lewebseite.common.service.AbstractService;
  * @version 1.0
  *
  */
+@Service
 public class ArticleService extends AbstractService<Article, Long, ArticleRepository> {
 
 	/**

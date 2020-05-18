@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "module": "es6",
+        "baseUrl": ".",
+        "allowSyntheticDefaultImports": true,
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ],
+            "*": [
+                "assets/*",
+            ]
+        }
+    },
+    "include": [
+        "./src/**/*"
+    ]
+}

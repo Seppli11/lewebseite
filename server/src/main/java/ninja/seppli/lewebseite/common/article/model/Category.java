@@ -3,11 +3,14 @@ package ninja.seppli.lewebseite.common.article.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -25,7 +28,7 @@ public class Category {
 	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 
 	/**
 	 * the name of the category
@@ -36,7 +39,8 @@ public class Category {
 	/**
 	 * the articles in this category
 	 */
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable
 	private List<Article> articles = new ArrayList<>();
 
 	/**
@@ -50,7 +54,8 @@ public class Category {
 	 * @param name the name of the category
 	 */
 	public Category(String name) {
-		this(-1, name);
+		this.id = null;
+		this.name = name;
 	}
 
 	/**
@@ -61,6 +66,41 @@ public class Category {
 	public Category(long id, String name) {
 		this.id = id;
 		this.name = name;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the articles
+	 */
+	public List<Article> getArticles() {
+		return articles;
 	}
 
 

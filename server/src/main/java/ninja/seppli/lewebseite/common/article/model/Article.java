@@ -1,14 +1,23 @@
 package ninja.seppli.lewebseite.common.article.model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import ninja.seppli.lewebseite.common.permission.model.User;
+import ninja.seppli.lewebseite.common.media.Media;
+import ninja.seppli.lewebseite.common.permission.model.ApplicationUser;
 
 /**
  * Represents a article
@@ -25,7 +34,7 @@ public class Article {
 	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 
 	/**
 	 * the title of the article
@@ -37,7 +46,7 @@ public class Article {
 	 * the author who wrote it
 	 */
 	@ManyToOne(optional = false)
-	private User author;
+	private ApplicationUser author;
 
 	/**
 	 * The cached file, or null if no cached version exists
@@ -50,6 +59,15 @@ public class Article {
 	 */
 	@Column(nullable = false, columnDefinition = "text")
 	private String text;
+
+	@ManyToMany(mappedBy = "articles", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	private List<Category> categories = new ArrayList<>();
+
+	/**
+	 * the header media of this article
+	 */
+	@ManyToMany(fetch = FetchType.LAZY , cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	private Set<Media> headerImages = new HashSet<>();
 
 	/**
 	 * Constructor for hibernate
@@ -65,7 +83,7 @@ public class Article {
 	 * @param cachedFile the cached file (can be null)
 	 * @param text       the text itself
 	 */
-	public Article(long id, String title, User author, String cachedFile, String text) {
+	public Article(long id, String title, ApplicationUser author, String cachedFile, String text) {
 		this.id = id;
 		this.title = title;
 		this.author = author;
@@ -80,14 +98,18 @@ public class Article {
 	 * @param cachedFile the cached file or null if none exists
 	 * @param text       the text itself
 	 */
-	public Article(String title, User author, String cachedFile, String text) {
-		this(-1, title, author, cachedFile, text);
+	public Article(String title, ApplicationUser author, String cachedFile, String text) {
+		this.id = null;
+		this.title = title;
+		this.author = author;
+		this.cachedFile = cachedFile;
+		this.text = text;
 	}
 
 	/**
 	 * @return the id
 	 */
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -108,14 +130,14 @@ public class Article {
 	/**
 	 * @return the author
 	 */
-	public User getAuthor() {
+	public ApplicationUser getAuthor() {
 		return author;
 	}
 
 	/**
 	 * @param author the author to set
 	 */
-	public void setAuthor(User author) {
+	public void setAuthor(ApplicationUser author) {
 		this.author = author;
 	}
 
@@ -145,5 +167,28 @@ public class Article {
 	 */
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	/**
+	 * Returns all catgegories in which this article is in
+	 *
+	 * @return the categories
+	 */
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	/**
+	 * @return the headerImages
+	 */
+	public Set<Media> getHeaderImages() {
+		return headerImages;
+	}
+
+	/**
+	 * @param headerImages the headerImages to set
+	 */
+	public void setHeaderImages(Set<Media> headerImages) {
+		this.headerImages = headerImages;
 	}
 }
