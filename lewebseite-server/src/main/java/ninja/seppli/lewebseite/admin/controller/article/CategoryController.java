@@ -31,7 +31,7 @@ import ninja.seppli.lewebseite.common.article.service.CategoryService;
  *
  */
 @RestController
-@RequestMapping("/admin/categories")
+@RequestMapping("/admin/api/categories")
 public class CategoryController {
 	/**
 	 * logger
@@ -76,7 +76,8 @@ public class CategoryController {
 	}
 
 	@PutMapping("/{id}")
-	public SmallCategory update(@PathVariable("id") long id, @RequestBody @Valid CreateCategory cat) throws NotFoundException {
+	public SmallCategory update(@PathVariable("id") long id, @RequestBody @Valid CreateCategory cat)
+			throws NotFoundException {
 		get(id);
 		Category category = new Category(id, cat.getName());
 		return SmallCategory.fromCategory(categoryService.save(category));
@@ -89,16 +90,17 @@ public class CategoryController {
 	}
 
 	@GetMapping("/{id}/articles")
-	public SmallArticle[] getArticlesInCategory(@PathVariable("id") long id) throws NotFoundException  {
+	public SmallArticle[] getArticlesInCategory(@PathVariable("id") long id) throws NotFoundException {
 		Category cat = categoryService.get(id).orElseThrow(() -> new NotFoundException("Category Not Found"));
 		return cat.getArticles().stream().map(SmallArticle::fromArticle).toArray(SmallArticle[]::new);
 	}
 
 	@PostMapping("/{catId}/articles/{articleId}")
-	public void addArticle(@PathVariable("catId") long catId, @PathVariable("articleId") long articleId) throws NotFoundException {
+	public void addArticle(@PathVariable("catId") long catId, @PathVariable("articleId") long articleId)
+			throws NotFoundException {
 		Category cat = categoryService.get(catId).orElseThrow(() -> new NotFoundException("Category Not Found"));
 		Article article = articleService.get(articleId).orElseThrow(() -> new NotFoundException("Article Not Found"));
-		if(cat.getArticles().contains(article)) {
+		if (cat.getArticles().contains(article)) {
 			logger.warn("Article {} is already part of Category {}", articleId, catId);
 			return;
 		}
@@ -107,10 +109,11 @@ public class CategoryController {
 	}
 
 	@DeleteMapping("/{catId}/articles/{articleId}")
-	public void removeArticle(@PathVariable("catId") long catId, @PathVariable("articleId") long articleId) throws NotFoundException {
+	public void removeArticle(@PathVariable("catId") long catId, @PathVariable("articleId") long articleId)
+			throws NotFoundException {
 		Category cat = categoryService.get(catId).orElseThrow(() -> new NotFoundException("Category Not Found"));
 		Article article = articleService.get(articleId).orElseThrow(() -> new NotFoundException("Article Not Found"));
-		if(!cat.getArticles().contains(article)) {
+		if (!cat.getArticles().contains(article)) {
 			logger.warn("Article {} isn't part of Category {}", articleId, catId);
 			return;
 		}

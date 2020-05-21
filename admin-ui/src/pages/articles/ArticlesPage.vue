@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="container-fluid">
+    <h1>Articles</h1>
     <div id="article-list-toolbar">
       <b-button-toolbar>
         <b-button variant="primary" @click="addArticle">

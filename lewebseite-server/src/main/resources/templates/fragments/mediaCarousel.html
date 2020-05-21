@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Carusel Description</title>
+</head>
+
+<body>
+    <div th:fragment="mediaCarousel (medias,active)" class="media-carousel" th:if="${medias.size() > 0}">
+        <div class="left-control control" th:if="${medias.size() > 1}">
+            <i class="fas fa-angle-double-left"></i>
+        </div>
+        <div class="right-control control" th:if="${medias.size() > 1}">
+            <i class="fas fa-angle-double-right"></i>
+        </div>
+        <div class="img-container crop" th:classappend="${i.index == active}?'active-img'"
+            th:each="media,i : ${medias}">
+            <img th:src="@{|/media/${media.id}/file|}">
+            <a th:href="@{|/media/${media.id}/file|}" th:download="${media.fileName}"><i
+                    class="fas fa-download download-btn"></i></a>
+        </div>
+    </div>
+</body>
+
+</html>

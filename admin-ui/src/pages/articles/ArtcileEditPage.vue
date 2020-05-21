@@ -12,6 +12,15 @@
       >
         <b-form-input id="title-input" v-model="title" type="text"></b-form-input>
       </b-form-group>
+
+      <b-form-group
+        id="description-group"
+        label="Description"
+        label-for="description-input"
+        description="The description of the article"
+      >
+        <b-form-textarea id="description-input" v-model="description" type="text"></b-form-textarea>
+      </b-form-group>
       <b-button @click="save" variant="primary">Save Article</b-button>
     </b-form>
 
@@ -44,6 +53,7 @@ export default {
       updateMode: false,
       articleId: this.$route.params.id,
       title: "",
+      description: "",
       text: "",
 
       tabIndex: 0,
@@ -56,6 +66,7 @@ export default {
     if (this.articleId >= 0) {
       const article = await Article.getArticle(this.articleId);
       this.title = article.title;
+      this.description = article.description;
       this.selectedHeaderImages = article.headerImages;
       this.initialSelection = article.headerImages;
       this.text = await Article.getText(this.articleId);
@@ -65,11 +76,16 @@ export default {
   methods: {
     async save() {
       if (this.updateMode) {
-        Article.updateArticle({ id: this.articleId, title: this.title });
+        Article.updateArticle({
+          id: this.articleId,
+          title: this.title,
+          description: this.description
+        });
         Article.setText(this.articleId, this.text);
       } else {
         const createdArticle = await Article.createArticle({
-          title: this.title
+          title: this.title,
+          description: this.description
         });
         Article.setText(createdArticle.id, this.text);
         this.$router.back();

@@ -11,13 +11,14 @@ import ninja.seppli.lewebseite.common.permission.model.ApplicationUser;
 import ninja.seppli.lewebseite.common.permission.service.ApplicationUserService;
 
 @RestController
-@RequestMapping("/admin/users")
+@RequestMapping("/admin/api/users")
 public class UserController {
 	private ApplicationUserService userService;
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	/**
 	 * Constructor
+	 * 
 	 * @param userService
 	 * @param bCryptPasswordEncoder
 	 */

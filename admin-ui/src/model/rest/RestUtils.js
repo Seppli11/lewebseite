@@ -1,4 +1,4 @@
-export const BASE_URL = "/api";
+export const BASE_URL = "/admin/api";
 
 export async function getFetch(url) {
     return genericFetch(url)
@@ -88,7 +88,7 @@ const LOGIN_URL = "/login";
 const TOKEN_HEADER = "Authorization";
 
 export async function login(username, password) {
-    const response = await fetch(BASE_URL + LOGIN_URL, {
+    const response = await fetch(LOGIN_URL, {
         method: "POST",
         mode: "cors",
         cache: "no-cache",

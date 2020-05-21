@@ -1,0 +1,53 @@
+.crop {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.crop img {
+    margin: -25% 0;
+    width: 100%;
+}
+
+.media-carousel {
+    position: relative;
+    height: 100%;
+}
+
+.media-carousel .img-container {
+    display: none;
+}
+
+.media-carousel .control {
+    position: absolute;
+    height: 100%;
+    width: 50px;
+}
+
+.media-carousel .control:hover {
+    background-color: #fcfcfc40;
+    transition: background-color 0.7s ease;
+}
+
+.media-carousel .control * {
+    position: absolute;
+    top: calc(50% - 12px);
+    font-size: 30px;
+}
+
+.media-carousel .left-control * {
+    left: 10px;
+}
+
+.media-carousel .right-control {
+    right: 0px;
+    float: right;
+}
+
+.media-carousel .right-control * {
+    right: 10px;
+}
+
+.media-carousel .active-img {
+    display: block;
+}

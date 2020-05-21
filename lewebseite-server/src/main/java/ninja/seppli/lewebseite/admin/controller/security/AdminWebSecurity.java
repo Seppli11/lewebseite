@@ -22,6 +22,7 @@ public class AdminWebSecurity extends WebSecurityConfigurerAdapter {
 
 	/**
 	 * Constructor
+	 * 
 	 * @param userDetailsService
 	 * @param bCrypt
 	 */
@@ -31,18 +32,16 @@ public class AdminWebSecurity extends WebSecurityConfigurerAdapter {
 		this.bCrypt = bCrypt;
 	}
 
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeRequests()
-		.antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
-		.antMatchers(HttpMethod.GET, "/admin").permitAll()
-		.antMatchers(HttpMethod.GET, "/admin/js/*").permitAll()
-		.antMatchers("/admin").authenticated()
-		.and()
-		.addFilter(new JWTAuthenticationFilter(authenticationManager()))
-		.addFilter(new JWTAuthorizationFilter(authenticationManager()))
-		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
+				.antMatchers(HttpMethod.GET, "/admin").permitAll().antMatchers(HttpMethod.GET, "/admin/js/*")
+				.permitAll().antMatchers("/admin/api/*").authenticated().and()
+				.addFilter(new JWTAuthenticationFilter(authenticationManager()))
+				.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 	}
 
 	@Override

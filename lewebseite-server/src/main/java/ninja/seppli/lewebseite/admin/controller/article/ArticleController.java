@@ -28,7 +28,7 @@ import ninja.seppli.lewebseite.common.media.MediaService;
 import ninja.seppli.lewebseite.common.renderer.Renderer;
 
 @RestController
-@RequestMapping("/admin/articles")
+@RequestMapping("/admin/api/articles")
 public class ArticleController {
 	private ArticleService articleService;
 	private MediaService mediaService;
@@ -36,7 +36,8 @@ public class ArticleController {
 	private Renderer renderer;
 
 	@Autowired
-	public ArticleController(ArticleService articleService, MediaService mediaService, UserProvider userProvider, Renderer renderer) {
+	public ArticleController(ArticleService articleService, MediaService mediaService, UserProvider userProvider,
+			Renderer renderer) {
 		this.articleService = articleService;
 		this.mediaService = mediaService;
 		this.userProvider = userProvider;
@@ -50,19 +51,26 @@ public class ArticleController {
 
 	@GetMapping("/{articleId}")
 	public SmallArticle getMapping(@PathVariable("articleId") long articleId) throws NotFoundException {
-		return articleService.get(articleId).map(SmallArticle::fromArticle).orElseThrow(() -> new NotFoundException("Article Not Found"));
+		return articleService.get(articleId).map(SmallArticle::fromArticle)
+				.orElseThrow(() -> new NotFoundException("Article Not Found"));
 	}
 
 	@PostMapping("")
-	public SmallArticle createArticle(@RequestBody @Valid CreateArticle createArticle, @AuthenticationPrincipal User user) {
-		Article article = new Article(createArticle.getTitle(), userProvider.getUser(), null, "");
+	public SmallArticle createArticle(@RequestBody @Valid CreateArticle createArticle,
+			@AuthenticationPrincipal User user) {
+		Article article = new Article(createArticle.getTitle(), userProvider.getUser(), null, "",
+				createArticle.getDescription());
 		return SmallArticle.fromArticle(articleService.save(article));
 	}
 
 	@PutMapping("/{id}")
-	public void update(@PathVariable("id") long id, @RequestBody @Valid CreateArticle createArticle) throws NotFoundException {
+	public void update(@PathVariable("id") long id, @RequestBody @Valid CreateArticle createArticle)
+			throws NotFoundException {
 		Article oldArticle = articleService.get(id).orElseThrow(() -> new NotFoundException("Article Not Found"));
-		Article newArticle = new Article(id, createArticle.getTitle(), oldArticle.getAuthor(), null, oldArticle.getText());
+		Article newArticle = new Article(id, createArticle.getTitle(), oldArticle.getAuthor(),
+				oldArticle.getRenderedText(), oldArticle.getText(), createArticle.getDescription());
+		newArticle.setHeaderImages(oldArticle.getHeaderImages());
+		newArticle.setCategories(oldArticle.getCategories());
 		articleService.save(newArticle);
 	}
 
@@ -89,10 +97,11 @@ public class ArticleController {
 	}
 
 	@PutMapping("/{articleId}/setHeaderImage")
-	public void setHeaderImage(@PathVariable("articleId") long articleId, @RequestBody List<Long> ids) throws NotFoundException {
+	public void setHeaderImage(@PathVariable("articleId") long articleId, @RequestBody List<Long> ids)
+			throws NotFoundException {
 		Article article = articleService.get(articleId).orElseThrow(() -> new NotFoundException("Article Not Found"));
 		article.getHeaderImages().clear();
-		for(long id : ids) {
+		for (long id : ids) {
 			Media media = mediaService.get(id).orElseThrow(() -> new NotFoundException("Media Not Found"));
 			article.getHeaderImages().add(media);
 		}

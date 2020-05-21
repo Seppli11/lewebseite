@@ -1,7 +1,15 @@
+.article {
+    margin: 5px;
+}
+
 .article a {
     color: black;
 }
 
 .article a:hover {
     text-decoration: none;
+}
+
+.carousel-parent {
+    height: 300px;
 }

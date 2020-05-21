@@ -1,9 +1,7 @@
 package ninja.seppli.lewebseite.common.article.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -60,14 +58,20 @@ public class Article {
 	@Column(nullable = false, columnDefinition = "text")
 	private String text;
 
+	/**
+	 * the description of the article
+	 */
+	@Column(nullable = false)
+	private String description;
+
 	@ManyToMany(mappedBy = "articles", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private List<Category> categories = new ArrayList<>();
 
 	/**
 	 * the header media of this article
 	 */
-	@ManyToMany(fetch = FetchType.LAZY , cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	private Set<Media> headerImages = new HashSet<>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	private List<Media> headerImages = new ArrayList<>();
 
 	/**
 	 * Constructor for hibernate
@@ -78,32 +82,35 @@ public class Article {
 	/**
 	 * Constructor
 	 *
-	 * @param id         the id
-	 * @param author     the author
+	 * @param id           the id
+	 * @param author       the author
 	 * @param renderedText the cached file (can be null)
-	 * @param text       the text itself
+	 * @param text         the text itself
 	 */
-	public Article(long id, String title, ApplicationUser author, String renderedText, String text) {
+	public Article(long id, String title, ApplicationUser author, String renderedText, String text,
+			String description) {
 		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.renderedText = renderedText;
 		this.text = text;
+		this.description = description;
 	}
 
 	/**
 	 * Constructor
 	 *
-	 * @param author     the author
+	 * @param author       the author
 	 * @param renderedText the cached file or null if none exists
-	 * @param text       the text itself
+	 * @param text         the text itself
 	 */
-	public Article(String title, ApplicationUser author, String renderedText, String text) {
+	public Article(String title, ApplicationUser author, String renderedText, String text, String description) {
 		this.id = null;
 		this.title = title;
 		this.author = author;
 		this.renderedText = renderedText;
 		this.text = text;
+		this.description = description;
 	}
 
 	/**
@@ -125,6 +132,20 @@ public class Article {
 	 */
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
 	}
 
 	/**
@@ -171,6 +192,7 @@ public class Article {
 
 	/**
 	 * Returns a short version of {@link #getText()}
+	 * 
 	 * @return the shortened version
 	 */
 	public String getShortContent() {
@@ -187,16 +209,26 @@ public class Article {
 	}
 
 	/**
+	 * Sets the categories
+	 * 
+	 * @param categories the categories
+	 */
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
+	}
+
+	/**
 	 * @return the headerImages
 	 */
-	public Set<Media> getHeaderImages() {
+	public List<Media> getHeaderImages() {
 		return headerImages;
 	}
 
 	/**
 	 * @param headerImages the headerImages to set
 	 */
-	public void setHeaderImages(Set<Media> headerImages) {
+	public void setHeaderImages(List<Media> headerImages) {
 		this.headerImages = headerImages;
 	}
+
 }

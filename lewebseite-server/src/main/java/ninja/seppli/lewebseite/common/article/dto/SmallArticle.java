@@ -31,7 +31,7 @@ public class SmallArticle {
 	/**
 	 * An excerp of the content
 	 */
-	private String shortContent;
+	private String description;
 
 	/**
 	 * the author who wrote it
@@ -79,15 +79,15 @@ public class SmallArticle {
 	/**
 	 * @return the shortContent
 	 */
-	public String getShortContent() {
-		return shortContent;
+	public String getDescription() {
+		return description;
 	}
 
 	/**
-	 * @param shortContent the shortContent to set
+	 * @param description the shortContent to set
 	 */
-	public void setShortContent(String shortContent) {
-		this.shortContent = shortContent;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**
@@ -148,19 +148,6 @@ public class SmallArticle {
 	 */
 	private static LazyModelMapper mapper = new LazyModelMapper(mapperObj -> {
 		mapperObj.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-		mapperObj.typeMap(Article.class, SmallArticle.class).setPostConverter(context -> {
-			Article src = context.getSource();
-			if (src == null) {
-				return null;
-			}
-			String text = src.getText();
-			if (text != null) {
-				String shortText = text.substring(0, Math.min(300, text.length()));
-				context.getDestination().setShortContent(shortText);
-			}
-
-			return context.getDestination();
-		});
 	});
 
 	/**

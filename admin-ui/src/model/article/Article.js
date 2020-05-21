@@ -4,9 +4,10 @@ import Category from "@/model/article/Category";
 import { deleteFetch, postFetch, putFetch } from "@/model/rest/RestUtils";
 
 export default class Article {
-    constructor(id, title, author, shortContent, categories = [], headerImages) {
+    constructor(id, title, description, author, shortContent, categories = [], headerImages) {
         this.id = id;
         this.title = title;
+        this.description = description;
         this.author = author;
         this.shortContent = shortContent;
         this.categories = categories;
@@ -15,7 +16,7 @@ export default class Article {
 
     static fromObj(obj) {
         if (obj == null) return null;
-        return new Article(obj.id, obj.title, User.fromObj(obj.author), obj.shortContent, Category.fromObj(obj.categories), obj.headerImages);
+        return new Article(obj.id, obj.title, obj.description, User.fromObj(obj.author), obj.shortContent, Category.fromObj(obj.categories), obj.headerImages);
     }
 
     static async getArticles() {

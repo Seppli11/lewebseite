@@ -7,6 +7,7 @@
       <b-navbar-nav>
         <b-nav-item to="/">Main</b-nav-item>
         <b-nav-item to="/articles">Articles</b-nav-item>
+        <b-nav-item href="/">To Main Page</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>

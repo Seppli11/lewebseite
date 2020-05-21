@@ -24,7 +24,7 @@ import ninja.seppli.lewebseite.common.media.Media;
 import ninja.seppli.lewebseite.common.media.MediaService;
 
 @RestController
-@RequestMapping("/admin/media")
+@RequestMapping("/admin/api/media")
 public class MediaController {
 	private MediaService mediaService;
 
@@ -40,7 +40,7 @@ public class MediaController {
 
 	@PostMapping("")
 	public void uploadMedia(@RequestParam("files") List<MultipartFile> files) throws IOException {
-		for(MultipartFile file : files) {
+		for (MultipartFile file : files) {
 			Media media = mediaService.save(new Media(file.getOriginalFilename()));
 			mediaService.createFile(media, file.getInputStream());
 		}

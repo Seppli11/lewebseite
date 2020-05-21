@@ -1,0 +1,9 @@
+.carousel-parent {
+    height: 500px;
+}
+
+.download-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
