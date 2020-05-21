@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>ninja.seppli</groupId>
 	<artifactId>lewebseite-server</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<name>lewebseite</name>
 	<description>Un webseite, qu'on publie les articles</description>
 
@@ -170,7 +170,7 @@
 
 	<scm>
 		<connection>scm:git:https://github.com/JavaFrame/lewebseite.git</connection>
-	  <tag>lewebseite-server-0.0.1</tag>
+	  <tag>lewebseite-server-0.0.2</tag>
   </scm>
 
 </project>
