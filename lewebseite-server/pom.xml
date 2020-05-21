@@ -157,7 +157,7 @@
 				<executions>
 					<execution>
 						<id>default</id>
-						<phase>release</phase>
+						<phase>install</phase>
 						<goals>
 							<goal>build</goal>
 							<goal>push</goal>
