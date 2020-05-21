@@ -87,7 +87,63 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.6</version>
+				<configuration>
+					<workingDirectory>../frontend/verbose-succotash</workingDirectory>
+					<installDirectory>target</installDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+								<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+								<nodeVersion>v8.9.4</nodeVersion>
+								<npmVersion>5.6.0</npmVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<goals>
+								<goal>npm</goal>
+						</goals>
+						<configuration>
+								<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm run build</id>
+						<goals>
+								<goal>npm</goal>
+						</goals>
+						<configuration>
+								<arguments>run build</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+			<artifactId>maven-antrun-plugin</artifactId>
+			<executions>
+			<execution>
+				<phase>deploy</phase>
+				<configuration>
+					<tasks>
+						<copy todir="${project.basedir}(src/main/resources/static/admin">
+							<fileset dir="${project.basedir}/../admin-ui/dist/" />
+						</copy>
+					</tasks>
+				</configuration>
+				<goals>
+					<goal>run</goal>
+				</goals>
+			</execution>
+			</executions>
+		</plugin>
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>dockerfile-maven-plugin</artifactId>
@@ -103,7 +159,7 @@
 				<executions>
 					<execution>
 						<id>default</id>
-						<phase>install</phase>
+						<phase>release</phase>
 						<goals>
 							<goal>build</goal>
 							<goal>push</goal>
@@ -113,5 +169,9 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<scm>
+		<connection>scm:git:https://github.com/JavaFrame/lewebseite.git</connection>
+	</scm>
 
 </project>
