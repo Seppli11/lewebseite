@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>ninja.seppli</groupId>
 	<artifactId>lewebseite-server</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>lewebseite</name>
 	<description>Un webseite, qu'on publie les articles</description>
 
