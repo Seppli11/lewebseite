@@ -90,7 +90,7 @@
 				<artifactId>frontend-maven-plugin</artifactId>
 				<version>1.6</version>
 				<configuration>
-					<workingDirectory>../admin-ui</workingDirectory>
+					<workingDirectory>../admin-ui/</workingDirectory>
 					<installDirectory>target</installDirectory>
 				</configuration>
 				<executions>
@@ -131,7 +131,7 @@
 				<phase>deploy</phase>
 				<configuration>
 					<tasks>
-						<copy todir="${project.basedir}(src/main/resources/static/admin">
+						<copy todir="${project.basedir}/src/main/resources/static/admin">
 							<fileset dir="${project.basedir}/../admin-ui/dist/" />
 						</copy>
 					</tasks>
@@ -157,7 +157,7 @@
 				<executions>
 					<execution>
 						<id>default</id>
-						<phase>install</phase>
+						<phase>deploy</phase>
 						<goals>
 							<goal>build</goal>
 							<goal>push</goal>
