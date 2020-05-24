@@ -1,0 +1,19 @@
+version: '3.0'
+services:
+        lewebseite-server:
+                container_name: lewebseite-server
+                image: seppli/lewebseite:0.0.4-SNAPSHOT
+                ports:
+                        - 105:80
+                volumes:
+                        - ./application.properties:/opt/lewebseite/application.properties
+                restart: always
+
+        mariadb:
+                container_name: lewebseite-mariadb
+                image: mariadb
+                restart: always
+                environment:
+                        MYSQL_ROOT_PASSWORD: example
+
+

@@ -28,6 +28,7 @@ import ninja.seppli.lewebseite.common.media.MediaService;
 public class MediaController {
 	private MediaService mediaService;
 
+
 	/**
 	 * Constructor
 	 *

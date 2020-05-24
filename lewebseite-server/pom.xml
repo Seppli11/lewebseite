@@ -128,7 +128,7 @@
 			<artifactId>maven-antrun-plugin</artifactId>
 			<executions>
 			<execution>
-				<phase>deploy</phase>
+				<phase>install</phase>
 				<configuration>
 					<tasks>
 						<copy todir="${project.basedir}/src/main/resources/static/admin">
@@ -157,7 +157,7 @@
 				<executions>
 					<execution>
 						<id>default</id>
-						<phase>deploy</phase>
+						<phase>install</phase>
 						<goals>
 							<goal>build</goal>
 							<goal>push</goal>

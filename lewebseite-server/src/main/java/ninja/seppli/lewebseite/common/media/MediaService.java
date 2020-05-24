@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ninja.seppli.lewebseite.admin.controller.exception.NotFoundException;
+import ninja.seppli.lewebseite.common.CommonSettings;
 import ninja.seppli.lewebseite.common.service.AbstractService;
 
 @Service
@@ -18,14 +19,17 @@ public class MediaService extends AbstractService<Media, Long, MediaRepository> 
 
 	private final static int BUFFER_SIZE = 512;
 
+	private CommonSettings commonSettings;
+
 	/**
 	 * The media service Constructor
 	 *
 	 * @param mediaRepo
 	 */
 	@Autowired
-	public MediaService(MediaRepository mediaRepo) {
+	public MediaService(MediaRepository mediaRepo, CommonSettings commonSettings) {
 		super(mediaRepo);
+		this.commonSettings = commonSettings;
 	}
 
 	/**
@@ -90,7 +94,7 @@ public class MediaService extends AbstractService<Media, Long, MediaRepository> 
 	}
 
 	public File getFile(Media media) {
-		return new File("./media/" + media.getId() + ".media");
+		return new File(commonSettings.getMediaPath() + "/" + media.getId() + ".media");
 	}
 
 }

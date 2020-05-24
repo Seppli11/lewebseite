@@ -49,13 +49,13 @@ public class Article {
 	/**
 	 * The cached file, or null if no cached version exists
 	 */
-	@Column(nullable = true)
+	@Column(nullable = true, columnDefinition = "text")
 	private String renderedText;
 
 	/**
-	 * The actual text in the formatting language (ie. markdown, latex, ...)
+	 * the text of the article
 	 */
-	@Column(nullable = false, columnDefinition = "text")
+	@Column(nullable = true, columnDefinition = "text")
 	private String text;
 
 	/**
@@ -192,7 +192,7 @@ public class Article {
 
 	/**
 	 * Returns a short version of {@link #getText()}
-	 * 
+	 *
 	 * @return the shortened version
 	 */
 	public String getShortContent() {
@@ -210,7 +210,7 @@ public class Article {
 
 	/**
 	 * Sets the categories
-	 * 
+	 *
 	 * @param categories the categories
 	 */
 	public void setCategories(List<Category> categories) {
