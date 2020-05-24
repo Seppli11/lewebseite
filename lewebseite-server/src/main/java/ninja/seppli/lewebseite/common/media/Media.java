@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 /**
  * An representation of a media/file
@@ -12,6 +14,7 @@ import javax.persistence.Id;
  *
  */
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Media {
 
 	/**
@@ -20,6 +23,11 @@ public class Media {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
+	/**
+	 * the mimetype
+	 */
+	private String mimeType;
 
 	/**
 	 * the original filename
@@ -34,9 +42,11 @@ public class Media {
 
 	/**
 	 * Constructor
+	 * @param mimeType the mimetype
 	 * @param fileName the filename
 	 */
-	public Media(String fileName) {
+	public Media(String mimeType, String fileName) {
+		this.setMimeType(mimeType);
 		this.fileName = fileName;
 	}
 
@@ -45,10 +55,12 @@ public class Media {
 	/**
 	 * Constructor
 	 * @param id the id
+	 * @param mimeType the mimetype
 	 * @param fileName the filename
 	 */
-	public Media(Long id, String fileName) {
+	public Media(Long id, String mimeType, String fileName) {
 		this.id = id;
+		this.setMimeType(mimeType);
 		this.fileName = fileName;
 	}
 
@@ -58,6 +70,21 @@ public class Media {
 	public Long getId() {
 		return id;
 	}
+
+	/**
+	 * @return the mimeType
+	 */
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	/**
+	 * @param mimeType the mimeType to set
+	 */
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
+
 
 	/**
 	 * @param id the id to set
@@ -79,4 +106,5 @@ public class Media {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+
 }

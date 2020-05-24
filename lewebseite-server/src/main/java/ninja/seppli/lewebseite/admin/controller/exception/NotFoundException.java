@@ -15,7 +15,6 @@ public class NotFoundException extends Exception{
 	 */
 	public NotFoundException(String message, Throwable cause) {
 		super(message, cause);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

@@ -2,8 +2,6 @@ package ninja.seppli.lewebseite.admin.controller.media;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import ninja.seppli.lewebseite.admin.controller.exception.NotFoundException;
+import ninja.seppli.lewebseite.common.exception.InvalidMimeTypeException;
 import ninja.seppli.lewebseite.common.media.Media;
+import ninja.seppli.lewebseite.common.media.MediaFactory;
 import ninja.seppli.lewebseite.common.media.MediaService;
 
 @RestController
@@ -40,9 +40,10 @@ public class MediaController {
 	}
 
 	@PostMapping("")
-	public void uploadMedia(@RequestParam("files") List<MultipartFile> files) throws IOException {
+	public void uploadMedia(@RequestParam("files") List<MultipartFile> files) throws IOException, InvalidMimeTypeException {
 		for (MultipartFile file : files) {
-			Media media = mediaService.save(new Media(file.getOriginalFilename()));
+			Media unsavedMedia = new MediaFactory().getMediaFromMimeType(file);
+			Media media = mediaService.save(unsavedMedia);
 			mediaService.createFile(media, file.getInputStream());
 		}
 	}
@@ -63,10 +64,10 @@ public class MediaController {
 			throws NotFoundException, IOException {
 		Media media = mediaService.get(id).orElseThrow(() -> new NotFoundException("Media \"" + id + "\" not found"));
 		File file = mediaService.getFile(media);
-		String mimeTypeStr = Files.probeContentType(Paths.get(media.getFileName()));
-		MediaType mediaType = MediaType.valueOf(mimeTypeStr);
+		MediaType mediaType = MediaType.valueOf(media.getMimeType());
 		return ResponseEntity.ok().contentLength(file.length()).contentType(mediaType)
 				.body(new InputStreamResource(mediaService.readFromFile(media)));
 	}
+
 
 }
