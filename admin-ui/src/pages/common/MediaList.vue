@@ -5,7 +5,17 @@
         <b-card>
           <input type="checkbox" :value="file.id" v-model="selected" />
           {{file.fileName}}
-          <img :src="images[file.id]" width="200" />
+          <img
+            v-if="file.mimeType.startsWith('image/')"
+            :src="images[file.id]"
+            width="200"
+          />
+          <video
+            v-if="file.mimeType.startsWith('video/')"
+            :src="images[file.id]"
+            width="200"
+            controls
+          />
         </b-card>
       </li>
     </ul>

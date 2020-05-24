@@ -1,9 +1,10 @@
 <template>
   <div class="m-2">
-    <b-form-file v-model="files" placeholder="Choose image" accept="image/*"></b-form-file>
+    <b-form-file v-model="files" placeholder="Choose image" :accept="supportedMediaTypes" multiple></b-form-file>
+    <b-spinner variant="primary" label="Spinning" v-if="uploading"></b-spinner>
     <b-button class="mt-2" variant="primary" @click="upload">Upload</b-button>
     <h2>Images</h2>
-    <image-list
+    <media-list
       :mediaList="mediaList"
       :initialSelection="initialSelection"
       @selected="imgs => $emit('selected', imgs)"
@@ -13,7 +14,7 @@
 
 <script>
 import Media from "../../model/media/Media";
-import ImageListVue from "./ImageList.vue";
+import MediaListVue from "./MediaList.vue";
 export default {
   props: {
     initialSelection: {
@@ -24,20 +25,29 @@ export default {
   data() {
     return {
       files: [],
-      mediaList: []
+      mediaList: [],
+      supportedMediaTypes: "",
+      uploading: false
     };
   },
   methods: {
     async upload() {
-      await Media.uploadMedia(this.files);
+      this.uploading = true;
+      try {
+        await Media.uploadMedia(this.files);
+      } finally {
+        this.uploading = false;
+        this.files = [];
+      }
       this.mediaList = await Media.getAllMedia();
     }
   },
   async created() {
     this.mediaList = await Media.getAllMedia();
+    this.supportedMediaTypes = (await Media.getSupportedMimeTypes()).join(", ");
   },
   components: {
-    ImageList: ImageListVue
+    MediaList: MediaListVue
   }
 };
 </script>

@@ -6,6 +6,10 @@ export default class Media {
         this.name = name;
     }
 
+    static getSupportedMimeTypes() {
+        return getFetch("/media/supportedMimeTypes")
+    }
+
     static getMedia(id) {
         return getFetch(`/media/${id}`);
     }

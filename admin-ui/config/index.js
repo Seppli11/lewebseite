@@ -12,14 +12,14 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/admin/api': {
-        target: "http://localhost:8082",
+        target: "http://localhost:8080",
         changeOrigin: true,
         pathRewrite: {
           '^admin/api': '/api'
         }
       },
       '/login': {
-        target: "http://localhost:8082",
+        target: "http://localhost:8080",
         changeOrigin: true,
         pathRewrite: {
           '^login': '/login'

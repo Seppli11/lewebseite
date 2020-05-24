@@ -18,13 +18,13 @@ export async function deleteFetch(url) {
 
 export async function uploadFile(url, files) {
     const formData = new FormData();
-    if (typeof (files) == "array") {
-        files.forEach(file => formData.append("files", file))
+    if (Array.isArray(files)) {
+        files.forEach(file => formData.append("files", file, file.name))
     } else {
         formData.append("files", files)
     }
 
-    simpleFetch(url, "POST", formData, null)
+    return simpleFetch(url, "POST", formData, null)
 }
 
 async function genericFetch(url, method = "GET", body = null, json = true) {
