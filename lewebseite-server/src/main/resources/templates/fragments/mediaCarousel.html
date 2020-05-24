@@ -15,12 +15,18 @@
         <div class="right-control control" th:if="${medias.size() > 1}">
             <i class="fas fa-angle-double-right"></i>
         </div>
-        <div class="img-container crop" th:classappend="${i.index == active}?'active-img'"
-            th:each="media,i : ${medias}">
-            <img th:src="@{|/media/${media.id}/file|}">
-            <a th:href="@{|/media/${media.id}/file|}" th:download="${media.fileName}"><i
-                    class="fas fa-download download-btn"></i></a>
+        <div class="crop parent-container">
+			<div class="img-container crop" th:classappend="${i.index == active}?'active-img'"
+				th:each="media,i : ${medias}">
+				<img th:src="@{|/media/${media.id}/file|}" th:if="${media.mimeType.startsWith('image/')}">
+				<video controls th:src="@{|/media/${media.id}/file|}" th:if="${media.mimeType.startsWith('video/')}"></video>
+
+				<a th:href="@{|/media/${media.id}/file|}" th:download="${media.fileName}"><i
+						class="fas fa-download download-btn"></i></a>
+			</div>
         </div>
+		<a th:if="${medias.size() > 0}" class="download-link" th:href="@{|/media/${medias[0].id}/file|}" th:download="${medias[0].fileName}"><i
+				class="fas fa-download download-btn"></i></a>
     </div>
 </body>
 

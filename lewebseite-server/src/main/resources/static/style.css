@@ -9,12 +9,23 @@
     width: 100%;
 }
 
+.crop video {
+    height: 100%;
+    width: calc(100% - 100px);
+    margin: 0 50px 0 50px;
+    z-index: -2;
+}
+
 .media-carousel {
     position: relative;
     height: 100%;
 }
 
 .media-carousel .img-container {
+    display: none;
+}
+
+.media-carousel .img-container a{
     display: none;
 }
 
@@ -35,6 +46,7 @@
     font-size: 30px;
 }
 
+
 .media-carousel .left-control * {
     left: 10px;
 }
@@ -47,7 +59,13 @@
 .media-carousel .right-control * {
     right: 10px;
 }
+.media-carousel .download-link {
+	float: right;
+}
 
+.media-carousel .parent-container {
+	float: left;
+}
 .media-carousel .active-img {
     display: block;
 }

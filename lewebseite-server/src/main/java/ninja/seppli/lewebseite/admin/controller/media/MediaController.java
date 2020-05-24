@@ -3,6 +3,7 @@ package ninja.seppli.lewebseite.admin.controller.media;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -28,7 +29,6 @@ import ninja.seppli.lewebseite.common.media.MediaService;
 public class MediaController {
 	private MediaService mediaService;
 
-
 	/**
 	 * Constructor
 	 *
@@ -39,8 +39,14 @@ public class MediaController {
 		this.mediaService = mediaService;
 	}
 
+	@GetMapping("/supportedMimeTypes")
+	public String[] getSupportedMimeTypes() {
+		return new MediaFactory().getSupportedMimeTypes();
+	}
+
 	@PostMapping("")
-	public void uploadMedia(@RequestParam("files") List<MultipartFile> files) throws IOException, InvalidMimeTypeException {
+	public void uploadMedia(@RequestParam("files") List<MultipartFile> files)
+			throws IOException, InvalidMimeTypeException {
 		for (MultipartFile file : files) {
 			Media unsavedMedia = new MediaFactory().getMediaFromMimeType(file);
 			Media media = mediaService.save(unsavedMedia);
@@ -53,9 +59,22 @@ public class MediaController {
 		return mediaService.get(id).orElseThrow(() -> new NotFoundException("Media \"" + id + "\" not found"));
 	}
 
+	/**
+	 * Gets all medias
+	 * @param mimeTypeStrings mimeTypes which should be included. If empty, all mimetypes are allowed
+	 * @return the medias with the given mimetypes.
+	 */
 	@GetMapping("")
-	public List<Media> getAll() {
-		return mediaService.getAll();
+	public List<Media> getAll(@RequestParam(value = "mimeType", required = false) List<String> mimeTypeStrings) {
+		List<Media> mediaList = mediaService.getAll();
+		if(mimeTypeStrings == null || mimeTypeStrings.isEmpty()) {
+			return mediaList;
+		}
+		List<MediaType> mediaTypes = mimeTypeStrings.stream().map(MediaType::valueOf).collect(Collectors.toList());
+		return mediaList.stream().filter(media -> {
+			MediaType mediaMediaType = MediaType.valueOf(media.getMimeType());
+			return mediaTypes.stream().anyMatch(mediaType -> mediaType.includes(mediaMediaType));
+		}).collect(Collectors.toList());
 	}
 
 	@GetMapping(value = "/{id}/file")
@@ -68,6 +87,5 @@ public class MediaController {
 		return ResponseEntity.ok().contentLength(file.length()).contentType(mediaType)
 				.body(new InputStreamResource(mediaService.readFromFile(media)));
 	}
-
 
 }

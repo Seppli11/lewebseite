@@ -10,6 +10,10 @@ $(function () {
         var nextEl = $(containers[next]);
         currentEl.removeClass("active-img");
         nextEl.addClass("active-img");
+        var link = $("a", nextEl).attr("href");
+        var download = $("a", nextEl).attr("download");
+        $(".download-link", parent).attr("href", link);
+        $(".download-link", parent).attr("download", download);
     }
 
     function next(event, addIndex) {
