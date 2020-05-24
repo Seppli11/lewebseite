@@ -1,6 +1,7 @@
 package ninja.seppli.lewebseite.common;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * Common settings
@@ -9,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *
  */
 @ConfigurationProperties("lewebseite")
+@Component
 public class CommonSettings {
 	/**
 	 * the media path
@@ -28,5 +30,13 @@ public class CommonSettings {
 	 */
 	public String getMediaPath() {
 		return mediaPath;
+	}
+
+	/**
+	 * Sets the media path
+	 * @param mediaPath the media path
+	 */
+	public void setMediaPath(String mediaPath) {
+		this.mediaPath = mediaPath;
 	}
 }
