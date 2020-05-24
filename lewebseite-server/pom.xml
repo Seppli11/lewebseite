@@ -98,7 +98,7 @@
 				<executions>
 					<execution>
 						<id>install node and npm</id>
-						<phase>deploy</phase>
+						<phase>install</phase>
 						<goals>
 							<goal>install-node-and-npm</goal>
 						</goals>
@@ -109,17 +109,17 @@
 					</execution>
 					<execution>
 						<id>npm install</id>
-						<phase>deploy</phase>
+						<phase>install</phase>
 						<goals>
 							<goal>npm</goal>
 						</goals>
 						<configuration>
-							<arguments>deploy</arguments>
+							<arguments>install</arguments>
 						</configuration>
 					</execution>
 					<execution>
 						<id>npm run build</id>
-						<phase>deploy</phase>
+						<phase>install</phase>
 						<goals>
 							<goal>npm</goal>
 						</goals>
@@ -133,7 +133,7 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>deploy</phase>
+						<phase>install</phase>
 						<configuration>
 							<tasks>
 								<copy
@@ -163,7 +163,7 @@
 				<executions>
 					<execution>
 						<id>default</id>
-						<phase>deploy</phase>
+						<phase>install</phase>
 						<goals>
 							<goal>build</goal>
 							<goal>push</goal>
