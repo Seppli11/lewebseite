@@ -19,7 +19,7 @@ public class SubImage extends Media {
 	/**
 	 * the main Image
 	 */
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	private Image mainImage;
 
 	/**

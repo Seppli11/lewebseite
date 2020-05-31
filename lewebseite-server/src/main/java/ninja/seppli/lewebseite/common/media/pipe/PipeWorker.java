@@ -71,7 +71,8 @@ public class PipeWorker {
 	 * @return the status
 	 */
 	public void acceptJob(PipeJob<?> job, File file) {
-		service.execute(createJobRunnable(job, file));
+		Media media =  mediaService.save(job.getMedia());
+		service.execute(createJobRunnable(job, file, media));
 	}
 
 	/**
@@ -82,10 +83,11 @@ public class PipeWorker {
 	 * @param pipeStatus the pipe status
 	 * @return
 	 */
-	protected <T extends Media> Runnable createJobRunnable(PipeJob<T> job, File tempFile) {
+	protected <T extends Media> Runnable createJobRunnable(PipeJob<T> job, File tempFile, Media media) {
 		return () -> {
+			MediaService mediaService = appContext.getBean(MediaService.class);
 			@SuppressWarnings("unchecked")
-			T media = (T) mediaService.save(job.getMedia());
+			//T media = (T) mediaService.save(job.getMedia());
 			PipeStatus status = new PipeStatus(media.getId());
 			statusMap.put(status.getMediaId(), status);
 
@@ -96,7 +98,7 @@ public class PipeWorker {
 				pipeFunction = appContext.getBean(job.getPipeFunctionClass());
 			}
 			try {
-				pipeFunction.edit(media, tempFile, status);
+				pipeFunction.edit((T) media, tempFile, status);
 			} catch (MediaEditException e) {
 				logger.error("An error occured while editing the media \"{}\" with the function \"{}\"", media, pipeFunction.getClass().getName(), e);
 			}

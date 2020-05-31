@@ -70,7 +70,7 @@ export default {
           this.statusList[mediaId] = status;
           this.$set(this.statusList, mediaId, status);
           this.watchStatus(status);
-        }, 500);
+        }, 1000);
       } else {
         let media = this.findMedia(mediaId);
         this.downloadMedia(media);

@@ -48,8 +48,10 @@ public class ImagePipeFunction implements PipeFunction<Image> {
 		for (int size : commonSettings.getThumbnailSize()) {
 			SubImage unsavedSubImage = new SubImage("image/jpg", media.getFileName() + "-" + size + ".jpg", media, size,
 					size);
-			SubImage subImage = (SubImage) mediaService.save(unsavedSubImage);
-			media.getSubImages().add(subImage);
+			//SubImage subImage = (SubImage) mediaService.save(unsavedSubImage);
+			media.getSubImages().add(unsavedSubImage);
+			media = (Image) mediaService.save(media);
+			SubImage subImage = media.getSubImages().get(media.getSubImages().size() - 1);
 			pipeStatus.setStatus("Create thumbnail \"" + subImage.getFileName() + "\"");
 			logger.info("Create thumbnail of the size {} for image \"{}\" (mediaId: {})", size, media.getFileName(),
 					media.getId());
@@ -63,7 +65,6 @@ public class ImagePipeFunction implements PipeFunction<Image> {
 				throw new MediaEditException("Couldn't convert to size \"" + size + "\"");
 			}
 		}
-		mediaService.save(media);
 		pipeStatus.setStatus("Finished processing", true);
 	}
 
