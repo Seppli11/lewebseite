@@ -119,11 +119,11 @@ export async function login(username, password) {
 
 export const LoginManager = new class LoginManager {
     constructor() {
-        this.token = localStorage.getItem("token");
+        this.token = sessionStorage.getItem("token");
     }
     setToken(token) {
         this.token = token;
-        localStorage.setItem("token", token);
+        sessionStorage.setItem("token", token);
     }
 
     getToken() {

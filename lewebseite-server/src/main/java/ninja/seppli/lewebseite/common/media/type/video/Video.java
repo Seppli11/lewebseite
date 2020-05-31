@@ -1,4 +1,4 @@
-package ninja.seppli.lewebseite.common.media.type;
+package ninja.seppli.lewebseite.common.media.type.video;
 
 import javax.persistence.Entity;
 

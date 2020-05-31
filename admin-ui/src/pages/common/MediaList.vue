@@ -16,6 +16,9 @@
             width="200"
             controls
           />
+          <b-button variant="danger" @click="deleteMedia(file.id)">Delete</b-button>
+
+          <div v-if="statusList[file.id] != undefined">Status: {{statusList[file.id].status}}</div>
         </b-card>
       </li>
     </ul>
@@ -39,11 +42,12 @@ export default {
   data() {
     return {
       images: {},
-      selected: []
+      selected: [],
+      statusList: {}
     };
   },
   methods: {
-    async getUrl(file) {
+    async downloadMedia(file) {
       const response = await Media.downloadMedia(file);
       this.$set(this.images, file.id, response);
     },
@@ -54,21 +58,46 @@ export default {
     },
     findMedia(id) {
       return this.mediaList.find(img => img.id == id);
+    },
+    deleteMedia(id) {
+      this.$emit("deleted", this.findMedia(id));
+    },
+    watchStatus(status) {
+      let mediaId = status.mediaId;
+      if (!status.done) {
+        setTimeout(async () => {
+          let status = await Media.getStatus(mediaId);
+          this.statusList[mediaId] = status;
+          this.$set(this.statusList, mediaId, status);
+          this.watchStatus(status);
+        }, 500);
+      } else {
+        let media = this.findMedia(mediaId);
+        this.downloadMedia(media);
+      }
     }
   },
   watch: {
     initialSelection(newValue) {
-      this.selected = this.initialSelection.map(media => media.id);
+      this.selected = this.initialSelection.map(media =>
+        typeof media == "object" ? media.id : media
+      );
     },
     selected(newValue) {
       this.$emit("selected", this.mapToObjs(newValue));
     },
     mediaList(newValue) {
-      newValue.forEach(file => this.getUrl(file));
+      newValue.forEach(file => this.downloadMedia(file));
+      newValue.forEach(file => {
+        Media.getStatus(file.id).then(status => {
+          this.$set(this.statusList, file.id, status);
+          this.watchStatus(status);
+        });
+      });
     }
   },
   created() {
-    this.mediaList.forEach(file => this.getUrl(file));
+    this.mediaList.forEach(file => this.downloadMedia(file));
   }
 };
 </script>

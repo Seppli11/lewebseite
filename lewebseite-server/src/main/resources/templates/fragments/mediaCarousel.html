@@ -18,7 +18,7 @@
         <div class="crop parent-container">
 			<div class="img-container crop" th:classappend="${i.index == active}?'active-img'"
 				th:each="media,i : ${medias}">
-				<img th:src="@{|/media/${media.id}/file|}" th:if="${media.mimeType.startsWith('image/')}">
+				<img th:src="@{|/media/${media.id}/file|}" th:attr="srcset=${@mediaCarousel.generateSrcSet(media)}" th:if="${media.mimeType.startsWith('image/')}">
 				<video controls th:src="@{|/media/${media.id}/file|}" th:if="${media.mimeType.startsWith('video/')}"></video>
 
 				<a th:href="@{|/media/${media.id}/file|}" th:download="${media.fileName}"><i

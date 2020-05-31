@@ -2,8 +2,6 @@ package ninja.seppli.lewebseite.page.rhea.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +23,7 @@ import ninja.seppli.lewebseite.common.media.MediaService;
 
 /**
  * The main controller for the rhea layout
- * 
+ *
  * @author Sebastian Zumbrunn
  * @version 1.0
  *
@@ -42,7 +40,7 @@ public class RheaController {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param articleService the article service
 	 */
 	@Autowired
@@ -71,8 +69,8 @@ public class RheaController {
 			throws NotFoundException, IOException {
 		Media media = mediaService.get(id).orElseThrow(() -> new NotFoundException("Media \"" + id + "\" not found"));
 		File file = mediaService.getFile(media);
-		String mimeTypeStr = Files.probeContentType(Paths.get(media.getFileName()));
-		MediaType mediaType = MediaType.valueOf(mimeTypeStr);
+		//String mimeTypeStr = Files.probeContentType(Paths.get(media.getFileName()));
+		MediaType mediaType = MediaType.valueOf(media.getMimeType());
 		return ResponseEntity.ok().contentLength(file.length()).contentType(mediaType)
 				.body(new InputStreamResource(mediaService.readFromFile(media)));
 	}

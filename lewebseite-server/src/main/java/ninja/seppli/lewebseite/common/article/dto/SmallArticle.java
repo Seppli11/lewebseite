@@ -2,6 +2,7 @@ package ninja.seppli.lewebseite.common.article.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.convention.MatchingStrategies;
 
@@ -46,7 +47,7 @@ public class SmallArticle {
 	/**
 	 * the header images
 	 */
-	private List<Media> headerImages = new ArrayList<>();
+	private List<Long> headerImages = new ArrayList<>();
 
 	/**
 	 * @return the id
@@ -118,14 +119,14 @@ public class SmallArticle {
 	/**
 	 * @return the headerImages
 	 */
-	public List<Media> getHeaderImages() {
+	public List<Long> getHeaderImages() {
 		return headerImages;
 	}
 
 	/**
 	 * @param headerImages the headerImages to set
 	 */
-	public void setHeaderImages(List<Media> headerImages) {
+	public void setHeaderImages(List<Long> headerImages) {
 		this.headerImages = headerImages;
 	}
 
@@ -148,6 +149,8 @@ public class SmallArticle {
 	 */
 	private static LazyModelMapper mapper = new LazyModelMapper(mapperObj -> {
 		mapperObj.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+		mapperObj.createTypeMap(Article.class, SmallArticle.class)
+		.addMappings(mapping -> mapping.skip(SmallArticle::setHeaderImages));
 	});
 
 	/**
@@ -157,7 +160,9 @@ public class SmallArticle {
 	 * @return the small version
 	 */
 	public static SmallArticle fromArticle(Article article) {
-		return mapper.getMapper().map(article, SmallArticle.class);
+		SmallArticle smallArticle = mapper.getMapper().map(article, SmallArticle.class);
+		smallArticle.setHeaderImages(article.getHeaderImages().stream().map(Media::getId).collect(Collectors.toList()));
+		return smallArticle;
 	}
 
 }

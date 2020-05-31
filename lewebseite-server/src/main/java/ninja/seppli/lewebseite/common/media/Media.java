@@ -9,6 +9,7 @@ import javax.persistence.InheritanceType;
 
 /**
  * An representation of a media/file
+ *
  * @author Sebastian Zumbrunn
  * @version 1.0
  *
@@ -35,6 +36,16 @@ public class Media {
 	private String fileName;
 
 	/**
+	 * if the media is finished processing
+	 */
+	private boolean processed = false;
+
+	/*
+	 * if the media should be hidden when showing all
+	 */
+	private boolean hidden;
+
+	/**
 	 * Empty Constructor
 	 */
 	public Media() {
@@ -42,6 +53,7 @@ public class Media {
 
 	/**
 	 * Constructor
+	 *
 	 * @param mimeType the mimetype
 	 * @param fileName the filename
 	 */
@@ -50,11 +62,10 @@ public class Media {
 		this.fileName = fileName;
 	}
 
-
-
 	/**
 	 * Constructor
-	 * @param id the id
+	 *
+	 * @param id       the id
 	 * @param mimeType the mimetype
 	 * @param fileName the filename
 	 */
@@ -85,7 +96,6 @@ public class Media {
 		this.mimeType = mimeType;
 	}
 
-
 	/**
 	 * @param id the id to set
 	 */
@@ -107,4 +117,35 @@ public class Media {
 		this.fileName = fileName;
 	}
 
+	/**
+	 * @return the processed
+	 */
+	public boolean isProcessed() {
+		return processed;
+	}
+
+	/**
+	 * @param processed the processed to set
+	 */
+	public void setProcessed(boolean processed) {
+		this.processed = processed;
+	}
+
+	/**
+	 * Sets if the image should be hidden from beeing listed
+	 *
+	 * @param hidden
+	 */
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
+	}
+
+	/**
+	 * if the image should be hidden (like with a subimage)
+	 *
+	 * @return if hidden or not
+	 */
+	public boolean isHidden() {
+		return hidden;
+	}
 }

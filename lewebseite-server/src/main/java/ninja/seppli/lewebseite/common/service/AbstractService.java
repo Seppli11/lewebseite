@@ -58,7 +58,7 @@ public abstract class AbstractService <T, ID, REPO extends CrudRepository<T, ID>
 	 * @return The updated object. This should be used from now in case somehting changed
 	 * 	in the object, like the primary key
 	 */
-	public T save(T obj) {
+	public synchronized T save(T obj) {
 		return repo.save(obj);
 	}
 

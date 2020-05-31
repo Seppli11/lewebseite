@@ -1,6 +1,12 @@
-package ninja.seppli.lewebseite.common.media.type;
+package ninja.seppli.lewebseite.common.media.type.image;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
 import ninja.seppli.lewebseite.common.media.Media;
 
@@ -12,6 +18,11 @@ import ninja.seppli.lewebseite.common.media.Media;
  */
 @Entity
 public class Image extends Media {
+	/**
+	 * All sub images
+	 */
+	@OneToMany(mappedBy = "mainImage", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<SubImage> subImages = new ArrayList<>();
 
 	/**
 	 * Constructor
@@ -37,6 +48,15 @@ public class Image extends Media {
 	 */
 	public Image(String mimeType, String fileName) {
 		super(mimeType, fileName);
+	}
+
+
+	/**
+	 * Returns the sub images
+	 * @return the subimages
+	 */
+	public List<SubImage> getSubImages() {
+		return subImages;
 	}
 
 }

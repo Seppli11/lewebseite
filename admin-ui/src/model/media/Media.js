@@ -1,4 +1,4 @@
-import { getFetch, uploadFile, simpleFetch } from "@/model/rest/RestUtils";
+import { getFetch, uploadFile, simpleFetch, deleteFetch } from "@/model/rest/RestUtils";
 
 export default class Media {
     constructor(id, name) {
@@ -18,12 +18,19 @@ export default class Media {
         return getFetch(`/media`)
     }
 
+    static deleteMedia(id) {
+        return deleteFetch(`/media/${id}`);
+    }
+
+    static getStatus(id) {
+        return getFetch(`/media/${id}/status`);
+    }
+
     static uploadMedia(files) {
         return uploadFile(`/media`, files)
     }
 
     static downloadMedia(file) {
-        console.log(file)
         return simpleFetch(`/media/${file.id}/file`, "GET")
             .then(response => response.blob())
             .then(blob => new Promise((resolve, reject) => {

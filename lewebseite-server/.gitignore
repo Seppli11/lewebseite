@@ -55,3 +55,4 @@ hs_err_pid*
 
 release.pom.xml
 
+*.media

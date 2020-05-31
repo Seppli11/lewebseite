@@ -38,15 +38,8 @@ public class MediaService extends AbstractService<Media, Long, MediaRepository> 
 	 * @param in the input stream
 	 * @throws IOException
 	 */
-	public void createFile(Media media, InputStream in) throws IOException {
-		File file = getFile(media);
-		if(file.exists()) {
-			throw new IllegalArgumentException("The file \"" + file.getAbsolutePath() + "\" already exists");
-		}
-		file.getParentFile().mkdirs();
-		if(!file.createNewFile()) {
-			throw new IllegalStateException("Couldn't create the file \"" + file.getAbsolutePath() + "\"");
-		}
+	public void createFileAndWrite(Media media, InputStream in) throws IOException {
+		File file = createFile(media);
 		FileOutputStream out = new FileOutputStream(file);
 		byte[] buffer = new byte[BUFFER_SIZE];
 		int readBytes = 0;
@@ -57,6 +50,31 @@ public class MediaService extends AbstractService<Media, Long, MediaRepository> 
 			}
 			out.write(buffer, 0, readBytes);
 		} while(readBytes > 0);
+	}
+
+	@Override
+	public void delete(Media obj) {
+		super.delete(obj);
+	}
+
+	/**
+	 * creates a new file based on the media's id
+	 * @param media the media to write to
+	 * @return the created file
+	 * @throws IOException
+	 */
+	public File createFile(Media media) throws IOException {
+		File file = getFile(media);
+		if(file.exists()) {
+			throw new IllegalArgumentException("The file \"" + file.getAbsolutePath() + "\" already exists");
+		}
+		file.getParentFile().mkdirs();
+		if(!file.createNewFile()) {
+			throw new IllegalStateException("Couldn't create the file \"" + file.getAbsolutePath() + "\"");
+		}
+
+		return file;
+
 	}
 
 	/**
@@ -94,6 +112,9 @@ public class MediaService extends AbstractService<Media, Long, MediaRepository> 
 	}
 
 	public File getFile(Media media) {
+		if(media.getId() == null) {
+			throw new IllegalArgumentException("The Media wasn't saved an doesn't contain an id");
+		}
 		return new File(commonSettings.getMediaPath() + "/" + media.getId() + ".media");
 	}
 
