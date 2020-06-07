@@ -16,7 +16,17 @@
             width="200"
             controls
           />
+          <b-button :id="'showMetataBtn-' + file.id" variant="link">(show Metadata)</b-button>
           <b-button variant="danger" @click="deleteMedia(file.id)">Delete</b-button>
+          <b-popover
+            class="popover"
+            :target="'showMetataBtn-' + file.id"
+            triggers="focus"
+            placement="bottom"
+          >
+            <template v-slot:title>Metadata</template>
+            <b-table :items="toTableMetadataObj(file.properties)"></b-table>
+          </b-popover>
 
           <div v-if="statusList[file.id] != undefined">Status: {{statusList[file.id].status}}</div>
         </b-card>
@@ -75,6 +85,11 @@ export default {
         let media = this.findMedia(mediaId);
         this.downloadMedia(media);
       }
+    },
+    toTableMetadataObj(metadataArray) {
+      return metadataArray.map(obj => {
+        return { name: obj.name, value: obj.value };
+      });
     }
   },
   watch: {
@@ -106,5 +121,9 @@ export default {
 ul {
   list-style-type: none;
   padding: 0;
+}
+.popover {
+  height: 50vh;
+  overflow-y: scroll;
 }
 </style>

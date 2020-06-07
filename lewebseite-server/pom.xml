@@ -84,6 +84,11 @@
 			<artifactId>thumbnailator</artifactId>
 			<version>[0.4, 0.5)</version>
 		</dependency>
+		<dependency>
+			<groupId>com.drewnoakes</groupId>
+			<artifactId>metadata-extractor</artifactId>
+			<version>2.14.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -142,7 +147,7 @@
 						<configuration>
 							<tasks>
 								<copy
-									todir="${project.basedir}/src/main/resources/static/admin">
+									todir="${project.basedir}/target/classes/static/admin">
 									<fileset dir="${project.basedir}/../admin-ui/dist/" />
 								</copy>
 							</tasks>

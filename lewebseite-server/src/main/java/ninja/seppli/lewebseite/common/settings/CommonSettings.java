@@ -39,6 +39,11 @@ public class CommonSettings {
 	private WatermarkSettings watermark = new WatermarkSettings();
 
 	/**
+	 * the image settings
+	 */
+	private ImageSettings image = new ImageSettings();
+
+	/**
 	 * Constructor
 	 */
 	public CommonSettings() {
@@ -105,4 +110,19 @@ public class CommonSettings {
 	public void setWatermark(WatermarkSettings watermark) {
 		this.watermark = watermark;
 	}
+
+	/**
+	 * @return the image
+	 */
+	public ImageSettings getImage() {
+		return image;
+	}
+
+	/**
+	 * @param image the image to set
+	 */
+	public void setImage(ImageSettings image) {
+		this.image = image;
+	}
+
 }

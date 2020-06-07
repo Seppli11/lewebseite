@@ -3,6 +3,9 @@ package ninja.seppli.lewebseite.common.media.type.image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -10,6 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
 
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.Thumbnails.Builder;
@@ -70,8 +79,48 @@ public class ImagePipeFunction implements PipeFunction<Image> {
 		return watermarkBuilder.asBufferedImage();
 	}
 
+	/**
+	 * Reads the metadata from the given file and converts them to a list
+	 * @param imageFile the file to extract the metadata from
+	 * @return the list
+	 */
+	private List<ImageMetadataProperty> readMetadata(File imageFile) {
+		List<ImageMetadataProperty> list = new ArrayList<>();
+		Set<String> metadataToExtract = commonSettings.getImage().getMetadataToExtract();
+		try {
+			Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
+			for(Directory dir : metadata.getDirectories()) {
+				for(Tag tag : dir.getTags()) {
+					if(findLoosly(metadataToExtract, tag.getTagName())) {
+						list.add(new ImageMetadataProperty(tag.getDirectoryName(), tag.getTagName(), tag.getDescription()));
+					}
+				}
+			}
+		} catch (ImageProcessingException | IOException e) {
+			logger.warn("Couldn't extract metadata", e);
+		}
+		return list;
+	}
+
+	/**
+	 * Finds the needle loosly in the iterable
+	 * @param iterable the iterable
+	 * @param needle the needle
+	 * @return if found or not
+	 */
+	private boolean findLoosly(Iterable<String> iterable, String needle) {
+		for(String obj : iterable) {
+			if(obj.contains(needle)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public Image edit(Image media, File tempFile, PipeStatus pipeStatus) throws MediaEditException {
+		media.getProperties().addAll(readMetadata(tempFile)); // reads the metadata files
+		media = (Image) mediaService.save(media);
 
 		for (int size : commonSettings.getThumbnailSize()) {
 			SubImage unsavedSubImage = new SubImage("image/jpg", media.getFileName() + "-" + size + ".jpg", media, size,

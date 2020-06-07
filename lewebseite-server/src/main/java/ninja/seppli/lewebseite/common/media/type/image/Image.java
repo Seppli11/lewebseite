@@ -25,6 +25,12 @@ public class Image extends Media {
 	private List<SubImage> subImages = new ArrayList<>();
 
 	/**
+	 * the exif properties of the image
+	 */
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ImageMetadataProperty> properties = new ArrayList<>();
+
+	/**
 	 * Constructor
 	 */
 	public Image() {
@@ -57,6 +63,14 @@ public class Image extends Media {
 	 */
 	public List<SubImage> getSubImages() {
 		return subImages;
+	}
+
+	/**
+	 * the properties (for example exif metadata)
+	 * @return the list of properties
+	 */
+	public List<ImageMetadataProperty> getProperties() {
+		return properties;
 	}
 
 }

@@ -16,6 +16,7 @@ import ninja.seppli.lewebseite.common.service.LazyModelMapper;
  */
 public class SmallImage extends Media {
 	private List<Long> subImages = new ArrayList<>();
+	private List<ImageMetadataProperty> properties = new ArrayList<>();
 
 	public SmallImage() {
 	}
@@ -33,6 +34,23 @@ public class SmallImage extends Media {
 	public void setSubImages(List<Long> subImages) {
 		this.subImages = subImages;
 	}
+
+
+	/**
+	 * @return the properties
+	 */
+	public List<ImageMetadataProperty> getProperties() {
+		return properties;
+	}
+
+	/**
+	 * @param properties the properties to set
+	 */
+	public void setProperties(List<ImageMetadataProperty> properties) {
+		this.properties = properties;
+	}
+
+
 
 	/**
 	 * the mapper
