@@ -60,7 +60,7 @@ export default class Article {
     }
 
     static async setHeaderImages(article, images) {
-        const idArray = images.map(img => img.id);
+        const idArray = images.map(img => typeof(img) == 'object'? img.id : img);
         putFetch(this.ARTICLES_URL + "/" + article.id + "/setHeaderImage", idArray, true);
     }
 

@@ -21,6 +21,6 @@ public interface PipeFunction<T extends Media> {
 	 * @param pipeStatus  the pipe status
 	 * @throws MediaEditException if something goes wrong
 	 */
-	void edit(T media, File tempFile, PipeStatus pipeStatus) throws MediaEditException;
+	T edit(T media, File tempFile, PipeStatus pipeStatus) throws MediaEditException;
 
 }

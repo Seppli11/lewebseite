@@ -1,4 +1,4 @@
-package ninja.seppli.lewebseite.common;
+package ninja.seppli.lewebseite.common.settings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,11 @@ public class CommonSettings {
 	 */
 	@Value("${image.thumbnailSize:1920,720,480}")
 	private List<Integer> thumbnailSize = new ArrayList<>();
+
+	/**
+	 * the watermark settings
+	 */
+	private WatermarkSettings watermark = new WatermarkSettings();
 
 	/**
 	 * Constructor
@@ -85,6 +90,19 @@ public class CommonSettings {
 		this.thumbnailSize = thumbnailSize;
 	}
 
+	/**
+	 * Returns the watermark settings
+	 * @return the watermark settiogs
+	 */
+	public WatermarkSettings getWatermark() {
+		return watermark;
+	}
 
-
+	/**
+	 * the setter for the watermark settings
+	 * @param watermark the new settings object
+	 */
+	public void setWatermark(WatermarkSettings watermark) {
+		this.watermark = watermark;
+	}
 }

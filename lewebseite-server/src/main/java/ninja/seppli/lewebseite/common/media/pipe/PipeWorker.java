@@ -14,10 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import ninja.seppli.lewebseite.common.CommonSettings;
 import ninja.seppli.lewebseite.common.exception.MediaEditException;
 import ninja.seppli.lewebseite.common.media.Media;
 import ninja.seppli.lewebseite.common.media.MediaService;
+import ninja.seppli.lewebseite.common.settings.CommonSettings;
 
 /**
  * The pipe workers asyncly edits media files
@@ -80,15 +80,17 @@ public class PipeWorker {
 	 * @param <T> the media type
 	 * @param job the pipe job
 	 * @param tempFile the media temp file
+	 * @param media the media object
 	 * @param pipeStatus the pipe status
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	protected <T extends Media> Runnable createJobRunnable(PipeJob<T> job, File tempFile, Media media) {
 		return () -> {
+			Media workingMedia = media;
 			MediaService mediaService = appContext.getBean(MediaService.class);
 			@SuppressWarnings("unchecked")
-			//T media = (T) mediaService.save(job.getMedia());
-			PipeStatus status = new PipeStatus(media.getId());
+			PipeStatus status = new PipeStatus(workingMedia.getId());
 			statusMap.put(status.getMediaId(), status);
 
 			PipeFunction<T> pipeFunction  = null;
@@ -98,19 +100,20 @@ public class PipeWorker {
 				pipeFunction = appContext.getBean(job.getPipeFunctionClass());
 			}
 			try {
-				pipeFunction.edit((T) media, tempFile, status);
+				workingMedia = pipeFunction.edit((T) workingMedia, tempFile, status);
 			} catch (MediaEditException e) {
-				logger.error("An error occured while editing the media \"{}\" with the function \"{}\"", media, pipeFunction.getClass().getName(), e);
+				logger.error("An error occured while editing the media \"{}\" with the function \"{}\"", workingMedia.getClass().getName(), pipeFunction.getClass().getName(), e);
+
 			}
 
-			media.setProcessed(true);
-			mediaService.save(media);
+			workingMedia.setProcessed(true);
+			mediaService.save(workingMedia);
 			try {
-				mediaService.createFileAndWrite(media, new FileInputStream(tempFile));
+				mediaService.createFileAndWrite(workingMedia, new FileInputStream(tempFile));
 				if(!tempFile.delete()) {
 					logger.warn("Couldn't delete temp file \"{}\"");
 				}
-				logger.info("Processed \"{}\" (id: {})", media.getFileName(), media.getId());
+				logger.info("Processed \"{}\" (id: {})", workingMedia.getFileName(), workingMedia.getId());
 			} catch (IOException e) {
 				logger.error("Coulnd't read tempfile \"{}\"", tempFile.getAbsolutePath());
 			}

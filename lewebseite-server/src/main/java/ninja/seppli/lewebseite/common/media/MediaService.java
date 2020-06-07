@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ninja.seppli.lewebseite.admin.controller.exception.NotFoundException;
-import ninja.seppli.lewebseite.common.CommonSettings;
 import ninja.seppli.lewebseite.common.service.AbstractService;
+import ninja.seppli.lewebseite.common.settings.CommonSettings;
 
 @Service
 public class MediaService extends AbstractService<Media, Long, MediaRepository> {

@@ -12,6 +12,7 @@ import ninja.seppli.lewebseite.common.media.type.image.ImageFactory;
 import ninja.seppli.lewebseite.common.media.type.video.VideoFactory;
 import ninja.seppli.lewebseite.common.renderer.Renderer;
 import ninja.seppli.lewebseite.common.renderer.markdown.MarkdownRenderer;
+import ninja.seppli.lewebseite.common.settings.CommonSettings;
 
 /**
  * Contains all beans for the common packages which is used for both admin and
